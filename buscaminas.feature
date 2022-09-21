@@ -1,49 +1,92 @@
-Feature: Buscaminas
+Feature: Minesweeper
+
+'Cell (x,y) means row = x, colum = y
+
+Cell with bomb = *
+Cell without bomb = o
+Cell revealed = #
+Cell flagged = !
+Cell suspected = ?
+
+Cell with 1 adjacent bomb = 1
+Cell with 2 adjacent bomb = 2
+Cell with 3 adjacent bomb = 3
+Cell with 4 adjacent bomb = 4
+Cell with 5 adjacent bomb = 5
+Cell with 6 adjacent bomb = 6
+Cell with 7 adjacent bomb = 7
+Cell with 8 adjacent bomb = 8'
+
 
 Background: 
 Given the user opens the app
 
 Scenario: Default display screen
-Then it should display one mine counter, a reset button, a time counter and a grid(x,x) with buttons ready for the users interactions 
+Then it should display one mine counter,
+And a reset button,
+And a time counter,
+And a grid(x,x) with cells ready for the users interactions 
 
-Scenario Outline: Right clicking one button 
-Given the button is in the state of: "<InitialButtonState>"
-When the user presses the "<button>"
-Then the button should change to a state: "<PostButtonState>"
+Scenario: Right clicking a bomb
+Given there's a cell with a mine
+When the user right clicks it
+Then the user loses the game
 
+Scenario: Loses game
+Given the user right clicks a mine
+Then all the mines are revealed and the mine
+And the mine that was revealed first changes to a red one
 
-Examples:
-|button|InitialButtonState|PostButtonState|
-|1x1   |Mine             |Mine           |
-|1x1   |Blank            |Blank          |
-|1x1   |Blank            |Number 1       |
-|1x1   |Blank            |Number 2       |
-|1x1   |Blank            |Number 3       |
+Scenario: Flagging all the mines
+Given the users has only one mine without flagged
+When the users flags the last mine
+Then the users wins
 
+Scenario: Wins game
+Given the user wins the game
+Then the reset button changes to a smile
 
-Scenario Outline: Right Clicking one button that is a mine
-Given there is a button with a "<PostButtonState>" is "<mine>"
-When the user clicks that button
-Then the "<GameState>" changes to "<Over>"
-And  all the mines get revealed
-
-Examples:
-|PostButtonState|GameState|
-|mine           |Over     |
-
-Scenario Outline: Number of mines
-Given the user started the GameState
-Then it sgould display a grid (x,x) with a relation of ((xx)/mines = 6,4)------------------------------------------------------------------------
-
-Examples:
-|grid  |Number of Mines|
-|88   |10             |
-|16*16 |40             |
-
-
-Scenario Outline: Left Clicking one button
-Given the "<GameState>" != "<Over>" 
-When the user left clicks a button with a "<ButtonState>" = "<No interaction>"
-Then the "<Button State>" should change to "<Flaged>"
+Scenario Outline: Right clicking an empty cell without adjacent mines
+Given the user loads "<MockData>"
+When the user clicks an empty "<cell>"
+Then the adjacent cells get revealed until they have an adjacent cell 
+with a mine and then they get a number, with the number of mines they have adjacent
 
 Examples:
+|      MockData     |cell|    OutputLayout   |
+|oooo-o*oo-oooo-oooo|1,1 |#1oo-1ooo-oooo-oooo|
+|oooo-oooo-*o**-o**o|1,2 |####-1211-oooo-oooo|
+|oooo-oooo-oo*o-oooo|1,1 |###1-##2o-#1oo-#1oo|
+|oooo-oooo-oooo-ooo*|1,1 |####-####-##11-##1o|
+
+Scenario Outline:Right clicking an empty cell with adjacent mine/s
+Given the user loads "<MockData>"
+When the user clicks an empty "cell"
+Then the empty clicked cell should display to a "number"
+
+Examples:
+|layoutInput|cell|number|
+|ooo-*oo-ooo|2-2 |1     |
+|ooo-*o*-ooo|2-2 |2     |
+|**o-*oo-ooo|2-2 |3     |
+|***-*oo-ooo|2-2 |4     |
+|***-*o*-ooo|2-2 |5     |
+|***-*o*-*oo|2-2 |6     |
+|***-*o*-**o|2-2 |7     |
+|***-*o*-***|2-2 |8     |
+
+Scenario: Left clicking a cell
+Given there is a non-interacted cell
+When the user left clicks the cell
+Then the cell changes to  flagged "!"
+
+Scenario: Left clicking a cell already flagged
+Given there is a cell that is flag
+When the user left clicks the cell
+Then the cell changes to a non-interacted cell
+
+
+
+
+
+
