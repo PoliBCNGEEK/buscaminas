@@ -4,9 +4,12 @@ Feature: Minesweeper
 
 Cell with bomb = *
 Cell without bomb = o
+
+
 Cell revealed = #
 Cell flagged = !
 Cell suspected = ?
+
 
 Cell with 1 adjacent bomb = 1
 Cell with 2 adjacent bomb = 2
@@ -22,21 +25,50 @@ Background:
 Given the user opens the app
 
 Scenario: Default display screen
-Then it should display one mine counter,
-And a reset button,
-And a time counter,
-And a flag counter,
-And a grid(x,x) with cells ready for the users interactions 
+Then it should display one mine counter---------------------------------------------------------------------------
+And a reset button
+And a time counter
+And a flag counter
+And a grid(x,x) with cells ready for the users interactions / enable
 
-Scenario: Right clicking a bomb
-Given there's a cell with a mine
-When the user right clicks it
+Scenario: Right clicking a bomb / reveal ---------------------------------------------------------------convertir en test
+Given tthe user loads "*o"
+When the user revesl the cell "1-1"
 Then the user loses the game
 
 Scenario: Loses game
 Given the user right clicks a mine
 Then all the mines are revealed and the mine
 And the mine that was revealed first changes to a red one
+
+Scenario Outline: Reavealing a cell without mine, showing the number of surrounding mines
+Given the user loads "<MockData>"
+When the user clicks an empty "cell"
+Then the cell should display a "number"
+
+Examples:
+|layoutInput|cell|number|
+|ooo-ooo-ooo|2-2 |0     |
+|ooo-*oo-ooo|2-2 |1     |
+|ooo-*o*-ooo|2-2 |2     |
+|**o-*oo-ooo|2-2 |3     |
+|***-*oo-ooo|2-2 |4     |
+|***-*o*-ooo|2-2 |5     |
+|***-*o*-*oo|2-2 |6     |
+|***-*o*-**o|2-2 |7     |
+|***-*o*-***|2-2 |8     |
+
+Scenario: Revealling an empty cell; without mine and without any surrounding mine
+Given the user loads "ooo-ooo-ooo"
+When the user reveal the cell "2-2"
+Then the cell should display as empty
+
+Scenario: Revealling an empty cell: The surrounding cells must be revealed
+Given the user loads "ooo-ooo-ooo"
+When the user reveal the cell "2-2"
+Then the board status should be: "###-###-###"
+
+Scenario: An empty cell revelead by a neightboard, again, the surrounding mines must be revealed
 
 Scenario: Flagging all the mines
 Given the users has only one mine without flagged
@@ -47,7 +79,7 @@ Scenario: Wins game
 Given the user wins the game
 Then the reset button changes to a smile
 
-Scenario Outline: Right clicking an empty cell without adjacent mines
+Scenario Outline: Right clicking an empty cell without adjacent mines---poner mas informacion en given y when antes que then
 Given the user loads "<MockData>"
 When the user clicks an empty "<cell>"
 Then the adjacent cells get revealed until they have an adjacent cell 
@@ -60,21 +92,7 @@ Examples:
 |oooo-oooo-oo*o-oooo|1,1 |###1-##2o-#1oo-#1oo|
 |oooo-oooo-oooo-ooo*|1,1 |####-####-##11-##1o|
 
-Scenario Outline:Right clicking an empty cell with adjacent mine/s
-Given the user loads "<MockData>"
-When the user clicks an empty "cell"
-Then the empty clicked cell should display to a "number"
 
-Examples:
-|layoutInput|cell|number|
-|ooo-*oo-ooo|2-2 |1     |
-|ooo-*o*-ooo|2-2 |2     |
-|**o-*oo-ooo|2-2 |3     |
-|***-*oo-ooo|2-2 |4     |
-|***-*o*-ooo|2-2 |5     |
-|***-*o*-*oo|2-2 |6     |
-|***-*o*-**o|2-2 |7     |
-|***-*o*-***|2-2 |8     |
 
 Scenario: Left clicking a cell
 Given there is a non-interacted cell
@@ -91,7 +109,7 @@ Given there is a cell with a question
 When the user left clicks the cell
 Then the cell changes to a non-interacted cell
 
-Scenario Outline: The users uses too many flags an the flag counter becomes negative
+Scenario Outline: The users uses too many flags and the flag counter becomes negative----------utilizar mockdata pequeño
 Given the "<flagCounter>"
 When the users puts another flag
 Then the counter goes negative until the users removes some 
@@ -125,7 +143,7 @@ Scenario: Happy face
 Given the user flags every mine
 Then the "<restButton>" changes to "<happyFaceResetButton>"
 
-
+Scenario: flag counter
 
 
 
