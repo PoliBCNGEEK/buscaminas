@@ -25,6 +25,7 @@ Scenario: Default display screen
 Then it should display one mine counter,
 And a reset button,
 And a time counter,
+And a flag counter,
 And a grid(x,x) with cells ready for the users interactions 
 
 Scenario: Right clicking a bomb
@@ -83,7 +84,44 @@ Then the cell changes to  flagged "!"
 Scenario: Left clicking a cell already flagged
 Given there is a cell that is flag
 When the user left clicks the cell
+Then the cell changes to an interrogated cell
+
+Scenario:Left clicking a cell with a question
+Given there is a cell with a question
+When the user left clicks the cell
 Then the cell changes to a non-interacted cell
+
+Scenario Outline: The users uses too many flags an the flag counter becomes negative
+Given the "<flagCounter>"
+When the users puts another flag
+Then the counter goes negative until the users removes some 
+the flags until there's only 10
+
+Examples:
+|number of flags| flagCounter |
+|10             |0            |
+|9              |1            |
+|0              |10           |
+|15             |-5           |
+|20             |-10          |
+|1              |9            |
+
+
+Scenario: The timer runs
+Given there is a timer being null
+When the user interacts with a cell
+Then goes to 0 and the timer goes up for every second it passes
+
+Scenario: The user interacts with the reset button
+Given the user loads the default layout
+When the user interacts with the reset button
+Then the game restarts 
+
+Scenario: 
+
+
+
+
 
 
 
