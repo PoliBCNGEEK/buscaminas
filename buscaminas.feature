@@ -117,7 +117,16 @@ Given the user loads the default layout
 When the user interacts with the reset button
 Then the game restarts 
 
-Scenario: 
+Scenario: Sad face
+Given the user interacts with a mine
+Then the "<resetButton>" changes to "<sadFaceResetButton>"
+
+Scenario: Happy face 
+Given the user flags every mine
+Then the "<restButton>" changes to "<happyFaceResetButton>"
+
+
+
 
 
 
