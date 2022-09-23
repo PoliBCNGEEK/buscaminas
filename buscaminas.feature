@@ -134,6 +134,3 @@ Then the "<restButton>" changes to "<happyFaceResetButton>"
 
 
 
-
-
-
