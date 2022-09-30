@@ -24,14 +24,19 @@ Cell with 8 adjacent bomb = 8'
 Background: 
 Given the user opens the app
 
-Scenario: Default display screen
-Then it should display one mine counter---------------------------------------------------------------------------
-And a reset button
-And a time counter
-And a flag counter
-And a grid(x,x) with cells ready for the users interactions / enable
+Scenario:Display time counter
+Then the display should have a time counter
 
-Scenario: Right clicking a bomb / reveal ---------------------------------------------------------------convertir en test
+Scenario:Display flag counter
+Then the display should have a flag counter
+
+Scenario:Display reset button
+Then the display should have a reset button
+
+Scenario:Display cell grid
+Then the display should have a grid with x*y cells
+
+Scenario: Right clicking a bomb / reveal
 Given tthe user loads "*o"
 When the user revesl the cell "1-1"
 Then the user loses the game
@@ -68,7 +73,7 @@ Given the user loads "ooo-ooo-ooo"
 When the user reveal the cell "2-2"
 Then the board status should be: "###-###-###"
 
-Scenario: An empty cell revelead by a neightboard, again, the surrounding mines must be revealed
+Scenario: An empty cell revelead by a neighbor, again, the surrounding mines must be revealed
 
 Scenario: Flagging all the mines
 Given the users has only one mine without flagged
@@ -79,11 +84,11 @@ Scenario: Wins game
 Given the user wins the game
 Then the reset button changes to a smile
 
-Scenario Outline: Right clicking an empty cell without adjacent mines---poner mas informacion en given y when antes que then
+Scenario Outline: Right clicking an empty cell without adjacent mines
 Given the user loads "<MockData>"
 When the user clicks an empty "<cell>"
-Then the adjacent cells get revealed until they have an adjacent cell 
-with a mine and then they get a number, with the number of mines they have adjacent
+And the adjacent cell are blank
+Then the adjacent cells get revealed until they have an adjacent cell with a mine
 
 Examples:
 |      MockData     |cell|    OutputLayout   |
@@ -109,21 +114,30 @@ Given there is a cell with a question
 When the user left clicks the cell
 Then the cell changes to a non-interacted cell
 
-Scenario Outline: The users uses too many flags and the flag counter becomes negative----------utilizar mockdata pequeño
-Given the "<flagCounter>"
-When the users puts another flag
-Then the counter goes negative until the users removes some 
+Scenario Outline: The users uses too many flags and the flag counter becomes negative
+Given the user loads "<MockData>"
+And there is 10 flags
+When the user interacts putting another flag
+Then the "<flagCounter>" goes negative until the users removes some 
 the flags until there's only 10
 
 Examples:
-|number of flags| flagCounter |
-|10             |0            |
-|9              |1            |
-|0              |10           |
-|15             |-5           |
-|20             |-10          |
-|1              |9            |
+|      MockData     |flagCounter before|    OutputLayout   |flagCounter after|
+|o!!!-o*!!-!!o!-!!oo|0                 |o!!!-o!!!-!!o!-!!oo|-1               |
+|o!!!-o*!!-!!o!-!!oo|-1                |o!!!-o!!!-!!o!-!0oo|0                |
 
+Scenario Outline: Flag counter
+Given the user loads "<MockData>"
+When the user interacts putting a flag
+Then the "<flagCounter>" goes down from 10
+
+Examples:
+|      MockData     |flagCounter|
+|o!!!-o*!!-!!o!-!!oo|0          |
+|o!!!-o*!!-!!o!-!!oo|-1         |
+|oooo-oooo-!!!!-oooo|6          |
+|oooo-oooo-!!!!-!!!!|2          |
+|oooo-oooo-oooo-o!oo|9          |
 
 Scenario: The timer runs
 Given there is a timer being null
@@ -143,7 +157,6 @@ Scenario: Happy face
 Given the user flags every mine
 Then the "<restButton>" changes to "<happyFaceResetButton>"
 
-Scenario: flag counter
 
 
 
