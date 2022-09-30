@@ -24,18 +24,18 @@ Cell with 8 adjacent bomb = 8'
 Background: 
 Given the user opens the app
 
-Scenario:Display time counter
+Scenario: Display time counter
 Then the display should have a time counter
 And the time counter is null
 
-Scenario:Display flag counter
+Scenario: Display flag counter
 Then the display should have a flag counter
 And the flag counter shows the number of mines
 
-Scenario:Display reset button
+Scenario: Display reset button
 Then the display should have a reset button
 
-Scenario:Display cell grid
+Scenario: Display cell grid
 Then the display should have a grid with x*y cells
 
 Scenario: Right clicking a bomb / reveal
