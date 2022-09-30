@@ -73,8 +73,6 @@ Given the user loads "ooo-ooo-ooo"
 When the user reveal the cell "2-2"
 Then the board status should be: "###-###-###"
 
-Scenario: An empty cell revelead by a neighbor, again, the surrounding mines must be revealed
-
 Scenario: Flagging all the mines
 Given the users has only one mine without flagged
 When the users flags the last mine
@@ -96,7 +94,6 @@ Examples:
 |oooo-oooo-*o**-o**o|1,2 |####-1211-oooo-oooo|
 |oooo-oooo-oo*o-oooo|1,1 |###1-##2o-#1oo-#1oo|
 |oooo-oooo-oooo-ooo*|1,1 |####-####-##11-##1o|
-
 
 
 Scenario: Left clicking a cell
