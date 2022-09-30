@@ -9,6 +9,7 @@ Cell without bomb = o
 Cell revealed = #
 Cell flagged = !
 Cell suspected = ?
+Hiden cell "."
 
 
 Cell with 1 adjacent bomb = 1
@@ -20,37 +21,56 @@ Cell with 6 adjacent bomb = 6
 Cell with 7 adjacent bomb = 7
 Cell with 8 adjacent bomb = 8'
 
+const x = { isMine = true,
+            isHidden = true
+            }
+            addchild()
 
 Background: 
 Given the user opens the app
 
-Scenario: Display time counter
-Then the display should have a time counter
-And the time counter is null
+Scenario: Display time counter is empty by default
+Then the time counter is empty //should
 
-Scenario: Display flag counter
-Then the display should have a flag counter
-And the flag counter shows the number of mines
+Scenario Outline: Display flag counter by default shows the amount of mines
+Given tthe user loads the following mock data: "<board>"
+Then the flag counter should be "<counter>"
 
-Scenario: Display reset button
-Then the display should have a reset button
+Exampless:
+| board      | counter |
+| *ooo-*ooo  | 2 |
+| ***-**o    | 5 |
 
-Scenario: Display cell grid
-Then the display should have a grid with x*y cells
+Scenario: Display minefield, validate the initial dimensions
+Given tthe user loads the following mock data: "<board>"
+Then the minefield should have "<rows>" rows
+And the minefield should have "<columns>" columns
 
-Scenario: Right clicking a bomb / reveal
+Examples:
+| board      | rows | columns |
+| *ooo-*ooo  | 2 |
+| ***-**o    | 5 |
+
+
+Scenario: Right clicking a bomb / reveal!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Given tthe user loads "*o"
 When the user revesl the cell "1-1"
 Then the user loses the game
 
-Scenario: Loses game
-Given the user right clicks a mine
-Then all the mines are revealed and the mine
-And the mine that was revealed first changes to a red one
+Scenario: When the game is over, highlight the exploded mine
+Given tthe user loads "*o"
+When the user revesl the cell "1-1"
+Then the cell "1-1" should be highlighted
 
-Scenario Outline: Reavealing a cell without mine, showing the number of surrounding mines
+Scenario: When the game is over, all the mines should be revealled
+Given tthe user loads "*o-**"
+When the user revesl the cell "1-1"
+Then the cell "2-1" should show a mine
+And the cell "2-2" should show a mine
+
+Scenario Outline: Reavealing a cell without mine, showing the number of surrounding mines !!!!!eliminar cell
 Given the user loads "<MockData>"
-When the user clicks an empty "cell"
+When the user clicks an empty "2-2"
 Then the cell should display a "number"
 
 Examples:
@@ -66,29 +86,64 @@ Examples:
 |***-*o*-***|2-2 |8     |
 
 Scenario: Revealling an empty cell; without mine and without any surrounding mine
-Given the user loads "ooo-ooo-ooo"
+Given the user loads
+"""
+ooo
+ooo
+ooo
+***
+"""
 When the user reveal the cell "2-2"
-Then the cell should display as empty
+Then the cell should display as "empty"
 
 Scenario: Revealling an empty cell: The surrounding cells must be revealed
-Given the user loads "ooo-ooo-ooo"
+Given the user loads
+"""
+ooo
+ooo
+ooo
+***
+"""
 When the user reveal the cell "2-2"
-Then the board status should be: "###-###-###"
+Then the board status should be:
+"""
+###
+###
+232
+...
+"""
 
-Scenario: Flagging all the mines
+Scenario: empty cell revelead by a neightbour: The surrounding cells must be revealed
+Given the user loads
+"""  //cascarse un buen ejemplo
+ooo
+ooo
+ooo
+***
+"""
+When the user reveal the cell "2-2"
+Then the minefield should looks like:
+"""  
+###
+###
+232
+...
+"""
+
+Scenario: Flagging all the mines, wins the game   !!!!!cambiar a que flag se esta usando
 Given the users has only one mine without flagged
 When the users flags the last mine
 Then the users wins
 
-Scenario: Wins game
+Scenario: Wins game !!! poner concepto
 Given the user wins the game
 Then the reset button changes to a smile
 
-Scenario Outline: Right clicking an empty cell without adjacent mines
+Scenario Outline: Right clicking an empty cell without adjacent mines !!!! eliminar
 Given the user loads "<MockData>"
 When the user clicks an empty "<cell>"
 And the adjacent cell are blank
-Then the adjacent cells get revealed until they have an adjacent cell with a mine
+Then the adjacent cells get revealed until they have an adjacent cell with a mine !!!!!!!!!!!cambiar
 
 Examples:
 |      MockData     |cell|    OutputLayout   |
@@ -98,17 +153,20 @@ Examples:
 |oooo-oooo-oooo-ooo*|1,1 |####-####-##11-##1o|
 
 
-Scenario: Left clicking a cell
-Given there is a non-interacted cell
-When the user left clicks the cell
-Then the cell changes to flagged "!"
+Scenario: Si el usuario cree que debajo de una celda hay una mina, la puede marcar como minada !!! traducir y pulir
+When el usuario marca como minada la celda 1,1
+Thenla celda 1,1 deberia mostrar un símbolo de celda minada
 
-Scenario: Left clicking a cell already flagged
+//TODO COMO MARCAR COMO MINADA UNA CELDA CON EL MOUSE !!!!separar concepto de accion
+when el usuario haga right click en la celda 1,1
+then la celda 1,1 debería estar marcada como minada
+
+Scenario: Left clicking a cell already flagged !!! poner concepto!!!separar concepto de accion
 Given there is a cell that is flag
 When the user left clicks the cell
 Then the cell changes to an interrogated cell
 
-Scenario:Left clicking a cell with a question
+Scenario:Left clicking a cell with a question !!! poner concepto!!!separar concepto de accion
 Given there is a cell with a question
 When the user left clicks the cell
 Then the cell changes to a non-interacted cell
@@ -155,12 +213,3 @@ Then the "<resetButton>" changes to "<sadFaceResetButton>"
 Scenario: User wins, reset button changes to happy face
 Given the user flags every mine
 Then the "<restButton>" changes to "<happyFaceResetButton>"
-
-
-
-
-
-
-
-
-
