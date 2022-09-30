@@ -26,9 +26,11 @@ Given the user opens the app
 
 Scenario:Display time counter
 Then the display should have a time counter
+And the time counter is null
 
 Scenario:Display flag counter
 Then the display should have a flag counter
+And the flag counter shows the number of mines
 
 Scenario:Display reset button
 Then the display should have a reset button
@@ -99,7 +101,7 @@ Examples:
 Scenario: Left clicking a cell
 Given there is a non-interacted cell
 When the user left clicks the cell
-Then the cell changes to  flagged "!"
+Then the cell changes to flagged "!"
 
 Scenario: Left clicking a cell already flagged
 Given there is a cell that is flag
@@ -113,15 +115,15 @@ Then the cell changes to a non-interacted cell
 
 Scenario Outline: The users uses too many flags and the flag counter becomes negative
 Given the user loads "<MockData>"
-And there is 10 flags
-When the user interacts putting another flag
-Then the "<flagCounter>" goes negative until the users removes some 
-the flags until there's only 10
+When the user interacts puts a flag
+Then the "<flagCounter>" goes negative until there's the same number the flags as mines
 
 Examples:
 |      MockData     |flagCounter before|    OutputLayout   |flagCounter after|
-|o!!!-o*!!-!!o!-!!oo|0                 |o!!!-o!!!-!!o!-!!oo|-1               |
-|o!!!-o*!!-!!o!-!!oo|-1                |o!!!-o!!!-!!o!-!0oo|0                |
+|o*                 |1                 |!o                 |0                |
+|oo*                |1                 |!!o                |-1               |
+|o*-*o              |2                 |!!-!!              |-2               |
+|**oo-**oo-o**o-*ooo|7                 |*!!!-!!!!-!!!!-*ooo|-4               |
 
 Scenario Outline: Flag counter
 Given the user loads "<MockData>"
