@@ -108,7 +108,7 @@ Then the board status should be:
 ...
 """
 
-Scenario: Empty cell reveled by a neighbor: The surrounding cells must be revealed !!!!!!!!!!poner mas columnas
+Scenario: Empty cell reveled by a neighbor: The surrounding cells must be revealed    !!!!!!!!!!poner mas columnas
 Given the user loads
 """  
 ooo
@@ -125,7 +125,7 @@ Then the minefield should looks like:
 ...
 """
 
-Scenario: Flagging with ! all the mines, wins the game     !!!!conceptos
+Scenario: Flagging with ! all the mines, wins the game                                 !!!!conceptos
 Given the users has only one mine without flagged
 When the users flags  with ! the last mine
 Then the users wins
@@ -142,21 +142,21 @@ Scenario: Right clicking a cell, tagging as mined
 When the users rights clicks the 1,1 cell
 Then the cell 1,1 should be tagged as mined
 
-Scenario: Right clicking a cell already flagged with ! flags it with a ?  !!!!conceptos ? = tagged as uncertain
+Scenario: Right clicking a cell already flagged with ! flags it with a ?               !!!!conceptos ? = tagged as uncertain
 Given there is a cell 1,1 already flagged with a !
 When the user right clicks the cell 1,1
 Then the cell should be flagged with a ?
 
-Scenario: If the user thinks the flagged with ? has no longer a mine, he can eliminate the flag !!!!conceptos ? = tagged as uncertain
+Scenario: If the user thinks the flagged with ? has no longer a mine, he can eliminate the flag         !!!!conceptos ? = tagged as uncertain
 When the user try to mark again the already flagged with a ? mine 1,1
 Then the cell 1,1 returns to a hidden cell
 
-Scenario: Right clicking a cell already flagged with ? eliminates the flag !!!!conceptos ? = tagged as uncertain
+Scenario: Right clicking a cell already flagged with ? eliminates the flag                 !!!!conceptos ? = tagged as uncertain
 Given there is a cell 1,1 already flagged with a ?
 When the user right clicks the cell 1,1
 Then the cell should return to a hidden cell
 
-Scenario: Tagging cells with right click  !!!!revisar
+Scenario: Tagging cells with right click                                                !!!!revisar, borrando los de arriba siendo sustituidos por esto
 Given: the user tags the cell 1,1 as "<initialTag>"
 when: the user right clicks the cell 1,1
 Then: the cell 1,1 should be tagged as "<finalTag>"
@@ -174,7 +174,7 @@ And the flag counter is "0"
 When  the user tags as mined the cell "1-1"
 Then the flag counter should be "-1"
 
-Scenario Outline: Flag counter   !!!poner concepto y explicarlo
+Scenario Outline: Flag counter   !!!poner concepto y explicarlo, eliminar ejemplo
 Given the user loads "<MockData>"
 When the user interacts putting a flag
 Then the "<flagCounter>" goes down from 10
