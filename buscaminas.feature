@@ -108,24 +108,24 @@ Then the board status should be:
 ...
 """
 
-Scenario: empty cell reveled by a neighbor: The surrounding cells must be revealed 
+Scenario: Empty cell reveled by a neighbor: The surrounding cells must be revealed !!!!!!!!!!poner mas columnas
 Given the user loads
 """  
 ooo
 ooo
-ooo
-***
+oo*
+o*o
 """
 When the user reveal the cell "1-1"
 Then the minefield should looks like:
 """  
 ###
 #11
-1.*
-.*.
+12.
+...
 """
 
-Scenario: Flagging with ! all the mines, wins the game   
+Scenario: Flagging with ! all the mines, wins the game     !!!!conceptos
 Given the users has only one mine without flagged
 When the users flags  with ! the last mine
 Then the users wins
@@ -134,41 +134,47 @@ Scenario: Wins game, reset button changes state
 Given the user wins the game
 Then the reset button changes to a smile
 
-Scenario: If the user thinks there's a cell with a mine, it can be flagged with a ?
-When the user marks the cell with a mine 1,1
-Then the cell 1,1 should have a ? flag
+Scenario: If the user thinks there's a cell with a mine, it can be tagged as mined   !!!!conceptos
+When the user tags the cell with as mined 1,1
+Then the cell 1,1 should show a mined symbol
 
-Scenario: Right clicking a cell, flags it with a !
+Scenario: Right clicking a cell, tagging as mined
 When the users rights clicks the 1,1 cell
-Then the cell 1,1 should be flagged with a !
+Then the cell 1,1 should be tagged as mined
 
-Scenario: Right clicking a cell already flagged with ! flags it with a ?
+Scenario: Right clicking a cell already flagged with ! flags it with a ?  !!!!conceptos ? = tagged as uncertain
 Given there is a cell 1,1 already flagged with a !
 When the user right clicks the cell 1,1
 Then the cell should be flagged with a ?
 
-Scenario: If the user thinks the flagged with ? has no longer a mine, he can eliminate the flag
+Scenario: If the user thinks the flagged with ? has no longer a mine, he can eliminate the flag !!!!conceptos ? = tagged as uncertain
 When the user try to mark again the already flagged with a ? mine 1,1
 Then the cell 1,1 returns to a hidden cell
 
-Scenario: Right clicking a cell already flagged with ? eliminates the flag
+Scenario: Right clicking a cell already flagged with ? eliminates the flag !!!!conceptos ? = tagged as uncertain
 Given there is a cell 1,1 already flagged with a ?
 When the user right clicks the cell 1,1
 Then the cell should return to a hidden cell
 
-Scenario Outline: The users uses too many flags and the flag counter becomes negative
-Given the user loads "<MockData>"
-When the user interacts puts a flag
-Then the "<flagCounter>" goes negative until there's the same number the flags as mines
+Scenario: Tagging cells with right click  !!!!revisar
+Given: the user tags the cell 1,1 as "<initialTag>"
+when: the user right clicks the cell 1,1
+Then: the cell 1,1 should be tagged as "<finalTag>"
 
 Examples:
-|      MockData     |flagCounter before|    OutputLayout   |flagCounter after|
-|o*                 |1                 |!o                 |0                |
-|oo*                |1                 |!!o                |-1               |
-|o*-*o              |2                 |!!-!!              |-2               |
-|**oo-**oo-o**o-*ooo|7                 |*!!!-!!!!-!!!!-*ooo|-4               |
+|initialTag     | finalTag    |
+| none          | mined       |
+| mined         | uncertain   |
+| uncertain     | none        |
 
-Scenario Outline: Flag counter
+Scenario Outline: The users uses too many flags and the flag counter becomes negative
+Given the user loads "*oo"
+And the user tags as mined the cell "1-2"
+And the flag counter is "0"
+When  the user tags as mined the cell "1-1"
+Then the flag counter should be "-1"
+
+Scenario Outline: Flag counter   !!!poner concepto y explicarlo
 Given the user loads "<MockData>"
 When the user interacts putting a flag
 Then the "<flagCounter>" goes down from 10
@@ -181,20 +187,31 @@ Examples:
 |oooo-oooo-!!!!-!!!!|2          |
 |oooo-oooo-oooo-o!oo|9          |
 
-Scenario: The timer runs
-Given there is a timer being null
-When the user interacts with a cell
-Then goes to 0 and the timer goes up for every second it passes
+  # escenarios de cuando inicia una partida !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-Scenario: The user interacts with the reset button
-Given the user loads the default layout
-When the user interacts with the reset button
+  # destapa una celda -> empieza partida (o la pierde directamente)
+  # pone un tag a una celda -> empieza partida
+
+@manual
+Scenario: The timer runs when the game starts
+When the game is starts
+Then the timer should update the time for every second it passes
+
+Scenario: The user reset the game, the game must be initialized
+# load mock
+# destapar un par de celdas
+# poner un par de tags, uno de cada tipo
+When the user resets
+Then 
+# todas las celdas estan tapadas
+todas las celdas estan activas
+ningunga celda está tageada
+el contador vale ???
+el timer es empty 
+
+Scenario: The user rests the game, using the reset button
+# load mock
+# destapar un par de celdas
+# poner un par de tags, uno de cada tipo
+When the user clicks the reset button
 Then the game restarts 
-
-Scenario:User loses, reset button changes to sad face
-Given the user interacts with a mine
-Then the "<resetButton>" changes to "<sadFaceResetButton>"
-
-Scenario: User wins, reset button changes to happy face
-Given the user flags every mine
-Then the "<restButton>" changes to "<happyFaceResetButton>"
