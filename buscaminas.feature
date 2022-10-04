@@ -111,18 +111,18 @@ Then the board status should be:
 Scenario: Empty cell reveled by a neighbor: The surrounding cells must be revealed    !!!!!!!!!!poner mas columnas
 Given the user loads
 """  
-ooo
-ooo
-oo*
-o*o
+oooooo
+oooooo
+oo*ooo
+o*oooo
 """
 When the user reveal the cell "1-1"
 Then the minefield should looks like:
 """  
-###
-#11
-12.
-...
+######
+#111##
+12.1##
+...1##
 """
 
 Scenario: Flagging with ! all the mines, wins the game                                 !!!!conceptos
