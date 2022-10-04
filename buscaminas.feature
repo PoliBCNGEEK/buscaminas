@@ -108,7 +108,7 @@ Then the board status should be:
 ...
 """
 
-Scenario: Empty cell reveled by a neighbor: The surrounding cells must be revealed    !!!!!!!!!!poner mas columnas
+Scenario: Empty cell reveled by a neighbor: The surrounding cells must be revealed
 Given the user loads
 """  
 oooooo
