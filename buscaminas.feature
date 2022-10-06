@@ -7,7 +7,7 @@ Cell without bomb = o
 
 
 Cell revealed = #
-Cell flagged = !
+Cell mined = !
 Cell suspected = ?
 Hiden cell "."
 
@@ -138,11 +138,19 @@ Scenario: If the user thinks there's a cell with a mine, it can be tagged as min
 When the user tags the cell with as mined 1,1
 Then the cell 1,1 should show a mined symbol
 
-Scenario: If the user thinks the mine tagged as uncertain has no longer a mine, he can eliminate the tag  
-When the user try to mark again the already tagged as uncertain mine 1,1
-Then the cell 1,1 returns to a hidden cell
+Scenario: If the user thinks that doesn't have enough information to determine if under a cell there is a mine, it can be tagged as uncertain
+When the user tags the cell with as uncertain 1,1
+Then the cell 1,1 should show an uncertain symbol
 
-Scenario: Tagging cells with right click                         
+Scenario: If the user change the opinion about a cell tagged as mined, it can be untagged
+When the user untags the cell with as mined 1,1
+Then the cell 1,1 should not show a mined symbol
+
+Scenario: If the user change the opinion about a cell tagged as uncertain, it can be untagged
+When the user untags the cell with as uncertain 1,1
+Then the cell 1,1 should not show an uncertain symbol
+
+Scenario Outline: Tagging cells with right click                         
 Given: the user tags the cell 1,1 as "<initialTag>"
 when: the user right clicks the cell 1,1
 Then: the cell 1,1 should be tagged as "<finalTag>"
@@ -153,22 +161,26 @@ Examples:
 | mined         | uncertain   |
 | uncertain     | none        |
 
-Scenario Outline: The users uses too many flags and the flag counter becomes negative
+Scenario: If the user tags as mined then the mine the counter goes down
+Given the flag counter is "10"
+When the user tags as mined the cell "1-1"
+Then the flag counter should be "9"
+
+Scenario: The user uses too many mined tags and the flag counter becomes negative
 Given the user loads "*oo"
 And the user tags as mined the cell "1-2"
 And the flag counter is "0"
 When  the user tags as mined the cell "1-1"
 Then the flag counter should be "-1"
 
-Scenario Outline: If the user tags as mined a mine the counter goes down
-Given the counter is the number of mines
-When the user tags as mined a cell
-Then the counter goes down
-
-Scenario: The game starts when the user interacts with a cell
-Given the user loads the game
-When the user interacts in any form with a cell
+Scenario: The game starts when the user reveals a cell
+When the user reveals a cell
 Then the game starts
+
+Scenario: The game starts when the user tags a cell
+When the user tags a cell
+Then the game starts
+
 @manual
 Scenario: The timer runs when the game starts
 When the game is starts
@@ -177,16 +189,31 @@ Then the timer should update the time for every second it passes
 Scenario: The user reset the game, the game must be initialized
 Given the user loads
 """  
-######
-#111##
-12?1##
-!..1##
+ooo
+***
+ooo
+*o*
 """
+And the user discover the cell(1,1)
+And the user tags as mined the cell (2,1)
+And the user tags as uncertain the cell (3,1)
 When the user resets
-Then the board status should looks like:
+Then all the cells should be hidden
+And  all the cells shouldn't show a tag
+And all the cells should be enabled
+And the counter should be 10
+And the timer should be empty
+
+Scenario: The user reset the game, using the mouse
+Given the user loads
 """  
-......
-......
-......
-......
+ooo
+***
+ooo
+*o*
 """
+And the user discover the cell(1,1)
+And the user tags as mined the cell (2,1)
+And the user tags as uncertain the cell (3,1)
+When the user left clicks in the face button ????
+Then game should be reset
