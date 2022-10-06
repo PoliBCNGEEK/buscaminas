@@ -125,38 +125,24 @@ Then the minefield should looks like:
 ...1##
 """
 
-Scenario: Flagging with ! all the mines, wins the game                                 !!!!conceptos
-Given the users has only one mine without flagged
-When the users flags  with ! the last mine
+Scenario: Tagged as mined all the mines, wins the game    
+Given the users has only one mine without being tagged
+When the users tags as mined the last mine
 Then the users wins
 
 Scenario: Wins game, reset button changes state
 Given the user wins the game
 Then the reset button changes to a smile
 
-Scenario: If the user thinks there's a cell with a mine, it can be tagged as mined   !!!!conceptos
+Scenario: If the user thinks there's a cell with a mine, it can be tagged as mined
 When the user tags the cell with as mined 1,1
 Then the cell 1,1 should show a mined symbol
 
-Scenario: Right clicking a cell, tagging as mined
-When the users rights clicks the 1,1 cell
-Then the cell 1,1 should be tagged as mined
-
-Scenario: Right clicking a cell already flagged with ! flags it with a ?               !!!!conceptos ? = tagged as uncertain
-Given there is a cell 1,1 already flagged with a !
-When the user right clicks the cell 1,1
-Then the cell should be flagged with a ?
-
-Scenario: If the user thinks the flagged with ? has no longer a mine, he can eliminate the flag         !!!!conceptos ? = tagged as uncertain
-When the user try to mark again the already flagged with a ? mine 1,1
+Scenario: If the user thinks the mine tagged as uncertain has no longer a mine, he can eliminate the tag  
+When the user try to mark again the already tagged as uncertain mine 1,1
 Then the cell 1,1 returns to a hidden cell
 
-Scenario: Right clicking a cell already flagged with ? eliminates the flag                 !!!!conceptos ? = tagged as uncertain
-Given there is a cell 1,1 already flagged with a ?
-When the user right clicks the cell 1,1
-Then the cell should return to a hidden cell
-
-Scenario: Tagging cells with right click                                                !!!!revisar, borrando los de arriba siendo sustituidos por esto
+Scenario: Tagging cells with right click                         
 Given: the user tags the cell 1,1 as "<initialTag>"
 when: the user right clicks the cell 1,1
 Then: the cell 1,1 should be tagged as "<finalTag>"
@@ -174,44 +160,33 @@ And the flag counter is "0"
 When  the user tags as mined the cell "1-1"
 Then the flag counter should be "-1"
 
-Scenario Outline: Flag counter   !!!poner concepto y explicarlo, eliminar ejemplo
-Given the user loads "<MockData>"
-When the user interacts putting a flag
-Then the "<flagCounter>" goes down from 10
+Scenario Outline: If the user tags as mined a mine the counter goes down
+Given the counter is the number of mines
+When the user tags as mined a cell
+Then the counter goes down
 
-Examples:
-|      MockData     |flagCounter|
-|o!!!-o*!!-!!o!-!!oo|0          |
-|o!!!-o*!!-!!o!-!!oo|-1         |
-|oooo-oooo-!!!!-oooo|6          |
-|oooo-oooo-!!!!-!!!!|2          |
-|oooo-oooo-oooo-o!oo|9          |
-
-  # escenarios de cuando inicia una partida !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  # destapa una celda -> empieza partida (o la pierde directamente)
-  # pone un tag a una celda -> empieza partida
-
+Scenario: The game starts when the user interacts with a cell
+Given the user loads the game
+When the user interacts in any form with a cell
+Then the game starts
 @manual
 Scenario: The timer runs when the game starts
 When the game is starts
 Then the timer should update the time for every second it passes
 
 Scenario: The user reset the game, the game must be initialized
-# load mock
-# destapar un par de celdas
-# poner un par de tags, uno de cada tipo
+Given the user loads
+"""  
+######
+#111##
+12?1##
+!..1##
+"""
 When the user resets
-Then 
-# todas las celdas estan tapadas
-todas las celdas estan activas
-ningunga celda está tageada
-el contador vale ???
-el timer es empty 
-
-Scenario: The user rests the game, using the reset button
-# load mock
-# destapar un par de celdas
-# poner un par de tags, uno de cada tipo
-When the user clicks the reset button
-Then the game restarts 
+Then the board status should looks like:
+"""  
+......
+......
+......
+......
+"""
