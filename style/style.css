@@ -1,0 +1,16 @@
+html{
+    margin: auto;
+    display: block;
+    background-color: bisque;
+}
+.table{
+    border: 2px;
+    border-color: black;
+}
+table{
+    width: 200px;
+    height: 100px;
+    margin: auto;
+    position: relative;
+    display: inline-flexbox;
+}

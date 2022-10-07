@@ -2,28 +2,24 @@
 
 <html>
   <head>
-    <link rel="stylesheet" href="./style/style.css" />
     <title>Minesweeper</title>
-    <link rel="shortcut icon" type="png" href="./img/favicon/favicon.ico"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="icon" href="/img/favicon/apple-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./style/style.css">
   </head>
   <body>
-    <div class="container">
-      <div class="row">
-        <div class="row">
-          <div class="col">
-            1 of 3
-          </div>
-          <div class="col">
-            2 of 3
-          </div>
-          <div class="col">
-            3 of 3
-          </div>
-        </div>
-      </div>
+    <div class="table">
+      <table>
+        <tr>
+          <th><label id="flag-counter">0</label></th>
+          <th><div id="smile"></div></th>
+          <th><label id="timer">0</label></th>
+        </tr>
+        <tr>
+          <table id="table">
+            
+          </table>
+        </tr>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="./scripts/main.js" defer></script>
   </body>
 </html>
