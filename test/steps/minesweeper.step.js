@@ -11,3 +11,4 @@ async function cellDiscover(string) {
 Given("the user opens the app",async function() {
     await page.goto(url);
 })
+

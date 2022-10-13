@@ -14,14 +14,12 @@ gameData();
 smile();
 const mineField = [];
 minefieldCreation();
-
+generateTable();
 //En el apartado de mine:false crear despues una function que los ponga random contando cada numero de random hasta que te quedes sin poner ninguna mina. !!!!!!
 function minefieldCreation(){
     for (let i = 0; i < obj.height; i++){
         mineField.push([])
-        console.log("----------"+i)
             for (let j = 0; j < obj.width; j++){
-                console.log(j);
                 mineField[i].push({
                     mine:false,
                     hidden:true,
@@ -29,32 +27,27 @@ function minefieldCreation(){
                 })
             }
     }
-    if (mineField[0,1].mine == false){
-        console.log("mineField[0,1]")
+    
+}
 
+function generateTable(){
+    var table = document.getElementById("table");
+    for (let i = 0; i < obj.height; i++){
+        var row = document.createElement("tr");
+        row.setAttribute("id","row:"+i);
+        for (let j = 0; j < obj.width; j++){
+            var cell = document.createElement("td");
+            var id = "cell:"+i+j;
+            var classCell= "cell";
+            cell.classList.add(classCell);
+            cell.setAttribute("id",id);
+            row.appendChild(cell);
+        }
+        table.appendChild(row);
     }
 }
 
-/*
-minefield[]
 
-bucle findLast i
-    mineField.push([])
-
-    bucle columnas j
-        mineField[i].push 
-
-minefield.push({
-    state = "";
-    smile = "normal";
-    height = "8";
-    width = "8";
-    numMines = "10";
-})
-
-mineField[0,2].state
-
-*/
 function  smile(){
     var src = document.getElementById("smile");
     var img = document.createElement("img");

@@ -1,16 +1,40 @@
 html{
-    margin: auto;
-    display: block;
-    background-color: bisque;
+    background-color:#7a4f32;
 }
-.table{
-    border: 2px;
-    border-color: black;
-}
+
 table{
     width: 200px;
     height: 100px;
     margin: auto;
     position: relative;
     display: inline-flexbox;
+    border: 5px solid #000;
+}
+.inputs{
+    width: 100%;
+    align-items: center;
+    position: relative;
+    display: flex;
+    margin-top: 50px;
+}
+#inputText{
+    margin-top: 50px;
+    height: 200px;
+    width: 250px;
+    position: relative;
+    margin: 0 auto;
+
+}
+#inputButton{
+    position: relative;
+    margin-left: 48.5%;
+}
+.table table{
+    background-color: #9c6540;
+}
+.cell{
+    border: 0.5px solid #000;
+    height: 20px;
+    width: 15px;
+    background-color: #7a4f32;
 }
