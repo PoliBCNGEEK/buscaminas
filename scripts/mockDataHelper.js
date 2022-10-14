@@ -31,6 +31,7 @@ const parseMockDataToString = (data) => {
     const regex = new RegExp(newLocal)
     return regex.test(data)
   }
+
   const validateMockData = (data) => {
     let isValidData
     if (data === undefined) {
@@ -40,12 +41,9 @@ const parseMockDataToString = (data) => {
     } else {
       isValidData = validateMockDataRow(data)
     }
-    console.log(isValidData);
     return isValidData
   } 
-  console.log(parseMockDataToString(mockData));
 
-  console.log(validateMockData(parseMockDataToString(mockData)));
 
   
   
@@ -61,7 +59,6 @@ const createBoardFromMockData = (data) => {
           x: column,
           isMineExploded: false,
           isRevealed: false,
-          userTag: '',
           isWrongTagged: false,
           numberOfMinesAround: 0,
           isMine: mockBoard[row][column] === '*'
