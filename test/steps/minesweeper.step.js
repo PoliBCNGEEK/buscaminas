@@ -7,7 +7,6 @@ async function cellDiscover(string) {
 	await page.click(`[data-testid="${string}"]`, { force: true });
 }
 
-//Background scenario
 Given("the user opens the app",async function() {
     await page.goto(url);
 })
