@@ -1,4 +1,4 @@
-Feature: Minesweeper
+00Feature: Minesweeper
 
 'Cell (x,y) means row = x, colum = y
 
@@ -46,6 +46,10 @@ Examples:
 | *ooo-*ooo  | 2    | 4       |
 | ***-**o-ooo| 3    | 3       |
 
+@manual
+Scenario: The timer runs when the game starts
+When the game is starts
+Then the timer should update the time for every second it passes
 
 Scenario: interacting with a cell with bomb, game is lost 
 Given the user loads "*o"
@@ -180,11 +184,6 @@ Then the game starts
 Scenario: The game starts when the user tags a cell
 When the user tags a cell
 Then the game starts
-
-@manual
-Scenario: The timer runs when the game starts
-When the game is starts
-Then the timer should update the time for every second it passes
 
 Scenario: The user reset the game, the game must be initialized
 Given the user loads

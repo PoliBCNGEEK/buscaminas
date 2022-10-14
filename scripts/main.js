@@ -3,17 +3,47 @@ function gameData(){
     var game = {}
     game.state = "";
     game.smile = "normal";
-    game.height = "8";
-    game.width = "8";
+    game.height = "2";
+    game.width = "4";
     game.numMines = "10";
+    game.timer = "0";
     return game;
 }
 const obj = gameData();
-
 gameData();
 smile();
+
+document.addEventListener('DOMContentLoaded', () => 
+{
+    if(window.location.search.includes('?')){
+        
+        
+    }else{
+        minefieldCreation();
+    }
+
+    flagCounter();
+})
+
+
+function flagCounter(){
+    var flagCounter = document.getElementById("flag-counter");
+    flagCounter.innerText = obj.numMines;
+}
+
+//falta poner empieze cuando haces click en una mina
+var iter = 0;
+function counter() {
+    var timer = document.getElementById("timer");
+
+    timer.innerText = iter;
+    console.log('show at ' + (iter++));
+    setTimeout(counter, 999);
+  }
+  
+
+
 const mineField = [];
-minefieldCreation();
 generateTable();
 //En el apartado de mine:false crear despues una function que los ponga random contando cada numero de random hasta que te quedes sin poner ninguna mina. !!!!!!
 function minefieldCreation(){

@@ -1,13 +1,9 @@
-const queryString = window.location.search
-const urlParams = new URLSearchParams(queryString)
-const mockData = urlParams.get('mockData')
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const mockData = urlParams.get('mockData');
+const board = [];
 
-
-
-console.log(mockData);
-
-
-export const parseMockDataToString = (data) => {
+const parseMockDataToString = (data) => {
     let strData = data.split(/\r?\n/).join('-')
     strData = strData.replaceAll(' ', '')
     strData = strData.replaceAll('|', '')
@@ -16,9 +12,26 @@ export const parseMockDataToString = (data) => {
     }
     return strData
   }
-  
-  
-  export const validateMockData = (data) => {
+
+  const validateMockDataRows = (dataRows) => {
+    const currentLenght = dataRows[0].length
+    let isValidData
+    for (let i = 0; i < dataRows.length; i += 1) {
+      if (dataRows[i].length !== currentLenght) {
+        isValidData = false
+        break
+      }
+      isValidData = validateMockDataRow(dataRows[i])
+    }
+    return isValidData
+  }
+
+  const validateMockDataRow = (data) => {
+    const newLocal = '^[o]$'
+    const regex = new RegExp(newLocal)
+    return regex.test(data)
+  }
+  const validateMockData = (data) => {
     let isValidData
     if (data === undefined) {
       isValidData = false
@@ -27,17 +40,16 @@ export const parseMockDataToString = (data) => {
     } else {
       isValidData = validateMockDataRow(data)
     }
+    console.log(isValidData);
     return isValidData
   } 
+  console.log(parseMockDataToString(mockData));
+
+  console.log(validateMockData(parseMockDataToString(mockData)));
+
   
   
-  const validateMockDataRow = (data) => {
-    const newLocal = '^[o]$'
-    const regex = new RegExp(newLocal)
-    return regex.test(data)
-  } 
-   
-  export const createBoardFromMockData = (data) => {
+const createBoardFromMockData = (data) => {
     const board = []
     let mockBoard = data.split('-')
     mockBoard = mockBoard.map((row) => { return row.split('') })
@@ -57,6 +69,8 @@ export const parseMockDataToString = (data) => {
       }
     }
     console.log('board', board)
-    minefieldNumbering(board)
+    //minefieldNumbering(board)
     return board
   }
+
+board = createBoardFromMockData(mockData);

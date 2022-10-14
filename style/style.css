@@ -35,6 +35,8 @@ table{
 .cell{
     border: 0.5px solid #000;
     height: 20px;
-    width: 15px;
+    width: 20px;
     background-color: #7a4f32;
+    background: url(/img/hidden.png);
+    background-size: 95%;
 }
