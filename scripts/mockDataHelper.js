@@ -1,7 +1,7 @@
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const mockData = urlParams.get('mockData');
-const board = [];
+var board = [];
 
 
 
@@ -73,5 +73,7 @@ const createBoardFromMockData = (data) => {
     //minefieldNumbering(board)
     return board
   }
+
+  
 
 board = createBoardFromMockData(mockData);

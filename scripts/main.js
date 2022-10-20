@@ -3,8 +3,8 @@ function gameData(){
     var game = {}
     game.state = "";
     game.smile = "normal";
-    game.height = "2";
-    game.width = "4";
+    game.height = "8";
+    game.width = "8";
     game.numMines = "10";
     game.timer = "0";
     return game;
@@ -12,18 +12,21 @@ function gameData(){
 const obj = gameData();
 gameData();
 smile();
-
+//counter();
 document.addEventListener('DOMContentLoaded', () => 
 {
     if(window.location.search.includes('?')){
         console.log("hay mockData");
+        console.log(board);
+        generateTable(board.length,board.length);
     }else{
         minefieldCreation();
-        generateTable();
+        generateTable(obj.height,obj.width);
     }
 
     flagCounter();
 })
+
 
 
 function flagCounter(){
@@ -59,12 +62,12 @@ function minefieldCreation(){
     
 }
 
-function generateTable(){
+function generateTable(height,width){
     var table = document.getElementById("table");
-    for (let i = 0; i < obj.height; i++){
+    for (let i = 0; i < height; i++){
         var row = document.createElement("tr");
         row.setAttribute("id","row:"+i);
-        for (let j = 0; j < obj.width; j++){
+        for (let j = 0; j < width; j++){
             var cell = document.createElement("td");
             var id = "cell:"+i+j;
             var classCell= "cell";
