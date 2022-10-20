@@ -3,6 +3,8 @@ const urlParams = new URLSearchParams(queryString);
 const mockData = urlParams.get('mockData');
 const board = [];
 
+
+
 const parseMockDataToString = (data) => {
     let strData = data.split(/\r?\n/).join('-')
     strData = strData.replaceAll(' ', '')
@@ -45,6 +47,8 @@ const parseMockDataToString = (data) => {
   } 
 
 
+  //Arreglar estoooo, da false siempre
+  console.log(validateMockData(parseMockDataToString(mockData)));
   
   
 const createBoardFromMockData = (data) => {

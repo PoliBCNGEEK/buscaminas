@@ -16,10 +16,10 @@ smile();
 document.addEventListener('DOMContentLoaded', () => 
 {
     if(window.location.search.includes('?')){
-        
-        
+        console.log("hay mockData");
     }else{
         minefieldCreation();
+        generateTable();
     }
 
     flagCounter();
@@ -44,7 +44,6 @@ function counter() {
 
 
 const mineField = [];
-generateTable();
 //En el apartado de mine:false crear despues una function que los ponga random contando cada numero de random hasta que te quedes sin poner ninguna mina. !!!!!!
 function minefieldCreation(){
     for (let i = 0; i < obj.height; i++){
