@@ -1,4 +1,4 @@
-00Feature: Minesweeper
+Feature: Minesweeper
 
 'Cell (x,y) means row = x, colum = y
 
