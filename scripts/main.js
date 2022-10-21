@@ -1,3 +1,4 @@
+var board = [];
 
 function gameData(){
     var game = {}
@@ -12,20 +13,49 @@ function gameData(){
 const obj = gameData();
 gameData();
 smile();
-//counter();
+function addEventClick() {
+    var ejes = [];
+
+    let cells = document.getElementsByTagName("td");
+    for (const elements of cells) {
+        elements.addEventListener('click', () => {
+            console.log(elements.getAttribute("id"));
+            ejes = elements.getAttribute("id").split('-');
+            console.log("ejes:    "+ejes);
+            if(board[ejes[0]][ejes[1]].isMine){
+                
+                console.log("buum");
+            }
+        });
+        elements.addEventListener('click', () => {
+        });
+    }
+
+}
+
+function getID() {
+    var cellInfo; 
+    return getElementById(cell)
+}
+
 document.addEventListener('DOMContentLoaded', () => 
 {
     if(window.location.search.includes('?')){
         console.log("hay mockData");
         console.log(board);
+        board = createBoardFromMockData(mockData);
         generateTable(board.length,board.length);
+        addEventClick();
     }else{
         minefieldCreation();
         generateTable(obj.height,obj.width);
+        addEventClick();
     }
 
     flagCounter();
 })
+
+
 
 
 
@@ -63,13 +93,14 @@ function minefieldCreation(){
 }
 
 function generateTable(height,width){
+    addEventClick();
     var table = document.getElementById("table");
     for (let i = 0; i < height; i++){
         var row = document.createElement("tr");
         row.setAttribute("id","row:"+i);
         for (let j = 0; j < width; j++){
             var cell = document.createElement("td");
-            var id = "cell:"+i+j;
+            var id = i+"-"+j;
             var classCell= "cell";
             cell.classList.add(classCell);
             cell.setAttribute("id",id);

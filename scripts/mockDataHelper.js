@@ -74,6 +74,3 @@ const createBoardFromMockData = (data) => {
     return board
   }
 
-  
-
-board = createBoardFromMockData(mockData);

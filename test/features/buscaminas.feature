@@ -27,14 +27,13 @@ Given the user opens the app
 Scenario: Display time counter is empty by default
 Then the time counter should be empty 
 
-Scenario Outline: Display flag counter by default shows the amount of mines
-Given the user loads the following mock data: "<board>"
-Then the flag counter should be "<counter>"
+@wip
+Scenario: Display flag counter by default shows the amount of mines
+Given the user loads the following mock data: "*ooo-*ooo"
+Then the flag counter should be "2"
 
-Examples:
-| board      | counter |
-| *ooo-*ooo  | 2       |
-| ***-**o    | 5       |
+
+
 
 Scenario: Display minefield, validate the initial dimensions
 Given the user loads the following mock data: "<board>"
@@ -151,7 +150,7 @@ When the user untags the cell with as mined 1,1
 Then the cell 1,1 should not show a mined symbol
 
 Scenario: If the user change the opinion about a cell tagged as uncertain, it can be untagged
-When the user untags the cell with as uncertain 1,1
+When the user untags the cell with a uncertain 1,1
 Then the cell 1,1 should not show an uncertain symbol
 
 Scenario Outline: Tagging cells with right click                         
