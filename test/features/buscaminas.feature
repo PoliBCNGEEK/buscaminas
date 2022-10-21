@@ -32,9 +32,6 @@ Scenario: Display flag counter by default shows the amount of mines
 Given the user loads the following mock data: "*ooo-*ooo"
 Then the flag counter should be "2"
 
-
-
-
 Scenario: Display minefield, validate the initial dimensions
 Given the user loads the following mock data: "<board>"
 Then the minefield should have "<rows>" rows

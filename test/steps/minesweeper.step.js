@@ -20,6 +20,6 @@ Given("the user loads the following mock data: {string}", async function (mockDa
 })
 
 Then("the flag counter should be {string}", async function (counter) {
-    const flagCounter =  await page.locator(`data-testid=flag-counter`).innerText;
+    const flagCounter =  await page.locator("data-testid=flag-counter").innerText;
     expect(flagCounter).toBe(counter);
 })

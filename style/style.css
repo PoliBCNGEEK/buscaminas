@@ -31,20 +31,21 @@ table{
 }
 .table table{
     background-color: #9c6540;
+    align-self: auto;
 }
+
 .cell{
+    height: 40px;
+    width: 40px;
     border: 0.5px solid #000;
-    height: 20px;
-    width: 20px;
     background-color: #7a4f32;
     background: url(/img/hidden.png);
-    background-size: 95%;
 }
 .cellMine{
     border: 0.5px solid #000;
     height: 20px;
     width: 20px;
     background-color: #7a4f32;
-    background: url(/img/mine.png);
-    background-size: 95%;
+    background: url(/img/mine-transparentBackground.png);
+    background-size:auto;
 }

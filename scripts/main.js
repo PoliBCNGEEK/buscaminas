@@ -15,7 +15,6 @@ gameData();
 smile();
 function addEventClick() {
     var ejes = [];
-
     let cells = document.getElementsByTagName("td");
     for (const elements of cells) {
         elements.addEventListener('click', () => {
@@ -23,7 +22,7 @@ function addEventClick() {
             ejes = elements.getAttribute("id").split('-');
             console.log("ejes:    "+ejes);
             if(board[ejes[0]][ejes[1]].isMine){
-                
+                revealMine(ejes[0],ejes[1]);
                 console.log("buum");
             }
         });
@@ -43,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () =>
     if(window.location.search.includes('?')){
         console.log("hay mockData");
         console.log(board);
+        obj.numMines = countMines(mockData);
         board = createBoardFromMockData(mockData);
         generateTable(board.length,board.length);
         addEventClick();
@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () =>
         generateTable(obj.height,obj.width);
         addEventClick();
     }
-
     flagCounter();
 })
 
@@ -117,4 +116,10 @@ function  smile(){
     //poner despues un if para cambiar el smile
     img.src = "./img/smile-normal.png";
     src.appendChild(img);
+}
+
+function revealMine(num1,num2){
+    var cell = document.getElementById(num1+"-"+num2);
+    cell.classList.add("cellMine");
+    cell.classList.remove("cell");
 }

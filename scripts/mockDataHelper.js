@@ -2,8 +2,15 @@ const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const mockData = urlParams.get('mockData');
 var board = [];
+var numMines;
 
 
+
+const countMines = (data) => {
+  return data.replace(/[^*]/g, "").length
+}
+
+console.log(countMines(mockData));
 
 const parseMockDataToString = (data) => {
     let strData = data.split(/\r?\n/).join('-')
