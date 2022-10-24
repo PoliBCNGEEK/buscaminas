@@ -47,5 +47,6 @@ table{
     width: 20px;
     background-color: #7a4f32;
     background: url(/img/mine-transparentBackground.png);
-    background-size:auto;
+    background-size:50px 50px;
+    background-position: center;
 }

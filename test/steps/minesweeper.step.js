@@ -20,6 +20,18 @@ Given("the user loads the following mock data: {string}", async function (mockDa
 })
 
 Then("the flag counter should be {string}", async function (counter) {
-    const flagCounter =  await page.locator("data-testid=flag-counter").innerText;
-    expect(flagCounter).toBe(counter);
+    const flagCounter =  await page.locator("data-testid=flag-counter");
+    await expect(flagCounter).toHaveText(counter);
+})
+
+Given("the user loads {string}", async function(mockData) {
+    await page.goto(url+"?mockData="+mockData);
+})
+
+When("the user reveals the cell {string}", async function (position){
+    await cellDiscover(position);
+})
+Then("the user loses the game", async function(){
+    const gameState = await page.locator("data-testid=smile").getAttribute('src');
+    await expect(gameState).toBe("/img/smile-sad.png");
 })

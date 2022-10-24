@@ -24,6 +24,8 @@ function addEventClick() {
             if(board[ejes[0]][ejes[1]].isMine){
                 revealMine(ejes[0],ejes[1]);
                 console.log("buum");
+                obj.state="lost";
+                smile();
             }
         });
         elements.addEventListener('click', () => {
@@ -54,10 +56,6 @@ document.addEventListener('DOMContentLoaded', () =>
     flagCounter();
 })
 
-
-
-
-
 function flagCounter(){
     var flagCounter = document.getElementById("flag-counter");
     flagCounter.innerText = obj.numMines;
@@ -73,8 +71,6 @@ function counter() {
     setTimeout(counter, 999);
   }
   
-
-
 const mineField = [];
 //En el apartado de mine:false crear despues una function que los ponga random contando cada numero de random hasta que te quedes sin poner ninguna mina. !!!!!!
 function minefieldCreation(){
@@ -99,10 +95,12 @@ function generateTable(height,width){
         row.setAttribute("id","row:"+i);
         for (let j = 0; j < width; j++){
             var cell = document.createElement("td");
+            var dataTestId = i+"-"+j;
             var id = i+"-"+j;
             var classCell= "cell";
             cell.classList.add(classCell);
             cell.setAttribute("id",id);
+            cell.setAttribute("data-testid",dataTestId);
             row.appendChild(cell);
         }
         table.appendChild(row);
@@ -110,12 +108,16 @@ function generateTable(height,width){
 }
 
 
-function  smile(){
+function smile(){
     var src = document.getElementById("smile");
-    var img = document.createElement("img");
-    //poner despues un if para cambiar el smile
-    img.src = "./img/smile-normal.png";
-    src.appendChild(img);
+    if(obj.state === ""){
+        
+    }else if(obj.state === "lost"){
+        src.src = ("/img/smile-sad.png");
+    }else{
+        src.src = ("/img/smile-happy.png");
+
+    }
 }
 
 function revealMine(num1,num2){

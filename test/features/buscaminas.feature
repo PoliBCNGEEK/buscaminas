@@ -9,7 +9,7 @@ Cell without bomb = o
 Cell revealed = #
 Cell mined = !
 Cell suspected = ?
-Hiden cell "."
+Hidden cell "."
 
 
 Cell with 1 adjacent bomb = 1
@@ -24,14 +24,16 @@ Cell with 8 adjacent bomb = 8'
 Background: 
 Given the user opens the app
 
+@done
 Scenario: Display time counter is empty by default
 Then the time counter should be empty 
 
-@wip
+@done
 Scenario: Display flag counter by default shows the amount of mines
 Given the user loads the following mock data: "*ooo-*ooo"
 Then the flag counter should be "2"
 
+# cambiar !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Scenario: Display minefield, validate the initial dimensions
 Given the user loads the following mock data: "<board>"
 Then the minefield should have "<rows>" rows
@@ -47,21 +49,22 @@ Scenario: The timer runs when the game starts
 When the game is starts
 Then the timer should update the time for every second it passes
 
+@done
 Scenario: interacting with a cell with bomb, game is lost 
 Given the user loads "*o"
-When the user reveals the cell "1-1"
+When the user reveals the cell "0-0"
 Then the user loses the game
 
 Scenario: When the game is over, highlight the exploded mine
 Given the user loads "*o"
-When the user reveals the cell "1-1"
-Then the cell "1-1" should be highlighted
+When the user reveals the cell "0-0"
+Then the cell "0-0" should be highlighted
 
 Scenario: When the game is over, all the mines should be revealed
 Given the user loads "*o-**"
-When the user reveals the cell "1-1"
-Then the cell "2-1" should show a mine
-And the cell "2-2" should show a mine
+When the user reveals the cell "0-0"
+Then the cell "1-0" should show a mine
+And the cell "1-0" should show a mine
 
 Scenario Outline: Revealing a cell without mine, showing the number of surrounding mines
 Given the user loads "<MockData>"
