@@ -1,34 +1,48 @@
-var board = [];
-
 function gameData(){
     var game = {}
     game.state = "";
     game.smile = "normal";
-    game.height = "8";
-    game.width = "8";
-    game.numMines = "10";
+    game.height = 8;
+    game.width = 8;
+    game.numMines = 10;
     game.timer = "0";
     return game;
 }
+var board = [];
 const obj = gameData();
 gameData();
 smile();
+
 function addEventClick() {
     var ejes = [];
     let cells = document.getElementsByTagName("td");
     for (const elements of cells) {
-        elements.addEventListener('click', () => {
-            console.log(elements.getAttribute("id"));
-            ejes = elements.getAttribute("id").split('-');
-            console.log("ejes:    "+ejes);
-            if(board[ejes[0]][ejes[1]].isMine){
-                revealMine(ejes[0],ejes[1]);
-                console.log("buum");
-                obj.state="lost";
-                smile();
+        elements.addEventListener('mousedown', (Event) => {
+            if(Event.button==0){
+                console.log(elements.getAttribute("id"));
+                ejes = elements.getAttribute("id").split('-');
+                console.log("ejes:    "+ejes);
+                if(board[ejes[0]][ejes[1]].isMine){
+                    updateCell(ejes[0],ejes[1],"isMineExploded",true);
+                    revealMine(ejes[0],ejes[1]);
+                    revealAllMines();
+                    console.log("buum");
+                    obj.state="lost";
+                    smile();
+                }
+            }else if(Event.button==2){
+                ejes = elements.getAttribute("id").split('-');
+                if(board[ejes[0][ejes[0]]].isFlagged){
+                   //questionmarked
+                   updateCell(ejes[0][ejes[1]],"isQuestionMarked",true); 
+                }
+                flagCell(ejes[0],ejes[1]);
+                console.log(ejes);
             }
+           
         });
-        elements.addEventListener('click', () => {
+        elements.addEventListener('contextmenu', (Event) => {
+            Event.preventDefault();
         });
     }
 
@@ -48,13 +62,33 @@ document.addEventListener('DOMContentLoaded', () =>
         board = createBoardFromMockData(mockData);
         generateTable(board.length,board.length);
         addEventClick();
+        randomMines();
     }else{
         minefieldCreation();
         generateTable(obj.height,obj.width);
+        randomMines();
+        console.log(board);
         addEventClick();
     }
     flagCounter();
 })
+
+function randomMines(){
+    const numSpaces = obj.height*obj.width;
+    var mines = [];
+    var numMinesPositioned = 0;
+    var numRandom1 = 0;
+    var numRandom2 = 0;
+    while(numMinesPositioned!=obj.numMines){
+        numRandom1 =  Math.floor(Math.random()*((obj.height)-1));
+        numRandom2 =  Math.floor(Math.random()*((obj.width)-1));
+        if(!board[numRandom1][numRandom2].isMine){
+            board[numRandom1][numRandom2].isMine=true;
+            numMinesPositioned++;
+        }
+    }
+    console.log(board);
+}
 
 function flagCounter(){
     var flagCounter = document.getElementById("flag-counter");
@@ -71,16 +105,18 @@ function counter() {
     setTimeout(counter, 999);
   }
   
-const mineField = [];
-//En el apartado de mine:false crear despues una function que los ponga random contando cada numero de random hasta que te quedes sin poner ninguna mina. !!!!!!
 function minefieldCreation(){
     for (let i = 0; i < obj.height; i++){
-        mineField.push([])
+        board.push([])
             for (let j = 0; j < obj.width; j++){
-                mineField[i].push({
-                    mine:false,
-                    hidden:true,
-                    num:null
+                board[i].push({
+                isMineExploded: false,
+                isRevealed: false,
+                isWrongTagged: false,
+                isFlagged: false,
+                isQuestionMarked: false,
+                numberOfMinesAround: 0,
+                isMine: false
                 })
             }
     }
@@ -88,7 +124,6 @@ function minefieldCreation(){
 }
 
 function generateTable(height,width){
-    addEventClick();
     var table = document.getElementById("table");
     for (let i = 0; i < height; i++){
         var row = document.createElement("tr");
@@ -116,12 +151,41 @@ function smile(){
         src.src = ("/img/smile-sad.png");
     }else{
         src.src = ("/img/smile-happy.png");
-
     }
 }
 
 function revealMine(num1,num2){
     var cell = document.getElementById(num1+"-"+num2);
+    updateCell(num1,num2,"isRevealed",true);
     cell.classList.add("cellMine");
     cell.classList.remove("cell");
+}
+
+function revealAllMines(){
+    for (let i = 0; i < obj.height; i++){
+        for (let j = 0; j < obj.width; j++){
+            if(board[i][j].isMine){
+                revealMine(i,j);
+            }
+        }
+    }
+}
+function flagCell(num1, num2){
+    var cell = document.getElementById(num1+"-"+num2);
+    updateCell(num1,num2,"isFlagged",true);
+    cell.classList.add("flagCell");
+    cell.classList.remove("cell");
+}
+
+function updateCell(num1,num2,property,value){
+    board[num1][num2][property] = value;
+    if(board[num1][num2].isRevealed){
+        board[num1][num2].isFlagged = false;
+        board[num1][num2].isQuestionMarked = false;
+    }else if(board[num1][num2].isFlagged){
+        board[num1][num2].isQuestionMarked = false;
+    }else if(board[num1][num2].isQuestionMarked){
+        board[num1][num2].isFlagged = false;
+    }
+    console.log("celda actualizada");
 }

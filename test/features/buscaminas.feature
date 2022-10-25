@@ -60,6 +60,7 @@ Given the user loads "*o"
 When the user reveals the cell "0-0"
 Then the cell "0-0" should be highlighted
 
+@wip
 Scenario: When the game is over, all the mines should be revealed
 Given the user loads "*o-**"
 When the user reveals the cell "0-0"

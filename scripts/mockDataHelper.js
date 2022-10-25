@@ -10,7 +10,6 @@ const countMines = (data) => {
   return data.replace(/[^*]/g, "").length
 }
 
-console.log(countMines(mockData));
 
 const parseMockDataToString = (data) => {
     let strData = data.split(/\r?\n/).join('-')
@@ -22,41 +21,6 @@ const parseMockDataToString = (data) => {
     return strData
   }
 
-  const validateMockDataRows = (dataRows) => {
-    const currentLenght = dataRows[0].length
-    let isValidData
-    for (let i = 0; i < dataRows.length; i += 1) {
-      if (dataRows[i].length !== currentLenght) {
-        isValidData = false
-        break
-      }
-      isValidData = validateMockDataRow(dataRows[i])
-    }
-    return isValidData
-  }
-
-  const validateMockDataRow = (data) => {
-    const newLocal = '^[o]$'
-    const regex = new RegExp(newLocal)
-    return regex.test(data)
-  }
-
-  const validateMockData = (data) => {
-    let isValidData
-    if (data === undefined) {
-      isValidData = false
-    } else if (data.includes('-')) {
-      isValidData = validateMockDataRows(data.split('-'))
-    } else {
-      isValidData = validateMockDataRow(data)
-    }
-    return isValidData
-  } 
-
-
-  //Arreglar estoooo, da false siempre
-  console.log(validateMockData(parseMockDataToString(mockData)));
-  
   
 const createBoardFromMockData = (data) => {
     const board = []
@@ -66,11 +30,11 @@ const createBoardFromMockData = (data) => {
       board.push([])
       for (let column = 0; column < mockBoard[0].length; column += 1) {
         board[row].push({
-          y: row,
-          x: column,
           isMineExploded: false,
           isRevealed: false,
           isWrongTagged: false,
+          isFlagged: false,
+          isQuestionMarked: false,
           numberOfMinesAround: 0,
           isMine: mockBoard[row][column] === '*'
         })
