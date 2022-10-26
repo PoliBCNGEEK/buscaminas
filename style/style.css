@@ -58,3 +58,83 @@ table{
     background-size:50px 50px;
     background-position: center;
 }
+.questionCell{
+    border: 0.5px solid #000;
+    height: 20px;
+    width: 20px;
+    background-color: plum;
+    background-size:50px 50px;
+    background-position: center;
+}
+.num0Cell{
+    border: 0.5px solid #000;
+    height: 20px;
+    width: 20px;
+    background-color: rgb(255, 255, 255);
+    background-size:50px 50px;
+    background-position: center;
+}
+.num1Cell{
+    border: 0.5px solid #000;
+    height: 20px;
+    width: 20px;
+    background-color: green;
+    background-size:50px 50px;
+    background-position: center;
+}
+.num2Cell{
+    border: 0.5px solid #000;
+    height: 20px;
+    width: 20px;
+    background-color: rgb(100, 220, 186);
+    background-size:50px 50px;
+    background-position: center;
+}
+.num3Cell{
+    border: 0.5px solid #000;
+    height: 20px;
+    width: 20px;
+    background-color: greenyellow;
+    background-size:50px 50px;
+    background-position: center;
+}
+.num4Cell{
+    border: 0.5px solid #000;
+    height: 20px;
+    width: 20px;
+    background-color: rgb(41, 115, 165);
+    background-size:50px 50px;
+    background-position: center;
+}
+.num5Cell{
+    border: 0.5px solid #000;
+    height: 20px;
+    width: 20px;
+    background-color: rgb(72, 58, 153);
+    background-size:50px 50px;
+    background-position: center;
+}
+.num6Cell{
+    border: 0.5px solid #000;
+    height: 20px;
+    width: 20px;
+    background-color: rgb(192, 100, 220);
+    background-size:50px 50px;
+    background-position: center;
+}
+.num7Cell{
+    border: 0.5px solid #000;
+    height: 20px;
+    width: 20px;
+    background-color: rgb(163, 48, 129);
+    background-size:50px 50px;
+    background-position: center;
+}
+.num8Cell{
+    border: 0.5px solid #000;
+    height: 20px;
+    width: 20px;
+    background-color: rgb(207, 14, 14);
+    background-size:50px 50px;
+    background-position: center;
+}

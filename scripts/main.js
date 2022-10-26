@@ -26,20 +26,15 @@ function addEventClick() {
                     updateCell(ejes[0],ejes[1],"isMineExploded",true);
                     revealMine(ejes[0],ejes[1]);
                     revealAllMines();
-                    console.log("buum");
                     obj.state="lost";
                     smile();
+                }else{
+                    uncoverCell(ejes[0],ejes[1]);
                 }
             }else if(Event.button==2){
                 ejes = elements.getAttribute("id").split('-');
-                if(board[ejes[0][ejes[0]]].isFlagged){
-                   //questionmarked
-                   updateCell(ejes[0][ejes[1]],"isQuestionMarked",true); 
-                }
-                flagCell(ejes[0],ejes[1]);
-                console.log(ejes);
+                 flagCell(ejes[0],ejes[1]);
             }
-           
         });
         elements.addEventListener('contextmenu', (Event) => {
             Event.preventDefault();
@@ -61,15 +56,14 @@ document.addEventListener('DOMContentLoaded', () =>
         obj.numMines = countMines(mockData);
         board = createBoardFromMockData(mockData);
         generateTable(board.length,board.length);
-        addEventClick();
-        randomMines();
+        
     }else{
         minefieldCreation();
         generateTable(obj.height,obj.width);
         randomMines();
-        console.log(board);
-        addEventClick();
     }
+    addEventClick();
+    adjacentMinesCount();
     flagCounter();
 })
 
@@ -115,12 +109,12 @@ function minefieldCreation(){
                 isWrongTagged: false,
                 isFlagged: false,
                 isQuestionMarked: false,
-                numberOfMinesAround: 0,
+                numberOfMinesAround: null,
                 isMine: false
                 })
             }
     }
-    
+    console.log(board);
 }
 
 function generateTable(height,width){
@@ -172,20 +166,82 @@ function revealAllMines(){
 }
 function flagCell(num1, num2){
     var cell = document.getElementById(num1+"-"+num2);
-    updateCell(num1,num2,"isFlagged",true);
-    cell.classList.add("flagCell");
-    cell.classList.remove("cell");
+    if(board[num1][num2].isFlagged){
+        questionCell(num1,num2);
+    }else if(board[num1][num2].isQuestionMarked){
+        hiddenCell(num1,num2);
+    }else{
+        updateCell(num1,num2,"isFlagged",true);
+        cell.classList.add("flagCell");
+        cell.classList.remove("cell");
+    }
+}
+function questionCell(num1, num2){
+    var cell = document.getElementById(num1+"-"+num2);
+    updateCell(num1,num2,"isQuestionMarked",true);
+    updateCell(num1,num2,"isFlagged",false);
+    cell.classList.add("questionCell");
+    cell.classList.remove("flagCell");
+   
+}
+function hiddenCell(num1, num2){
+    var cell = document.getElementById(num1+"-"+num2);
+    updateCell(num1,num2,"isQuestionMarked",false);
+    cell.classList.add("cell");
+    cell.classList.remove("questionCell");
 }
 
 function updateCell(num1,num2,property,value){
+    console.log(board[num1][num2]);
     board[num1][num2][property] = value;
-    if(board[num1][num2].isRevealed){
-        board[num1][num2].isFlagged = false;
-        board[num1][num2].isQuestionMarked = false;
-    }else if(board[num1][num2].isFlagged){
-        board[num1][num2].isQuestionMarked = false;
-    }else if(board[num1][num2].isQuestionMarked){
-        board[num1][num2].isFlagged = false;
+    console.log(board[num1][num2]);
+}
+function adjacentMinesOfCell(num1,num2){
+    var num = 0;
+    for (let i = num1-1; i <= num1+1; i++){
+        for (let j = num2-1; j <= num2+1; j++){
+            if(i>=0 && i<board.length && j>=0 && j<board[i].length){
+                if(board[i][j].isMine){
+                    num++;
+                }
+            }
+
+        }
     }
-    console.log("celda actualizada");
+    return num;
+}
+
+function adjacentMinesCount(){
+    for (let i = 0; i < board.length; i++){
+        for (let j = 0; j < board[i].length; j++){
+            if(!board[i][j].isMine){
+                board[i][j].numberOfMinesAround = adjacentMinesOfCell(i,j);
+            }
+        }
+    }
+}
+
+function uncoverCell(num1,num2){
+    var cell = document.getElementById(num1+"-"+num2);
+    
+    console.log("num"+board[num1][num2].numberOfMinesAround+"Cell");
+    cell.classList.add("num"+board[num1][num2].numberOfMinesAround+"Cell");
+    cell.classList.remove("cell");
+    updateCell(num1,num2,"isRevealed",true);
+    if(board[num1][num2].numberOfMinesAround == 0 && board[num1][num2].numberOfMinesAround!=null){
+        uncoverNeighbours(num1,num2);
+    }
+
+}
+
+function uncoverNeighbours(num1,num2){
+  for (let i = num1 - 1; i <= num1 + 1; i++) {
+    for (let j = num2 - 1; j <= num2 + 1; j++) {
+      if (i>=0 && i<board.length && j>=0 && j<board[i].length){
+        if (!board[i][j].isRevealed  && !board[i][j].isMine) {
+          uncoverCell(i, j);
+        }
+      }
+    }
+  }
 }
