@@ -35,3 +35,8 @@ Then("the user loses the game", async function(){
     const gameState = await page.locator("data-testid=smile").getAttribute('src');
     await expect(gameState).toBe("/img/smile-sad.png");
 })
+
+Then("the cell {string} should show a mine", async function(position){
+    let locator = await page.locator(`[data-testid="${position}"]`).getAttribute("class");
+    expect(locator).toBe(" ");
+})

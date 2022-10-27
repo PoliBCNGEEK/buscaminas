@@ -15,15 +15,17 @@ smile();
 
 function addEventClick() {
     var ejes = [];
+    var cell;
     let cells = document.getElementsByTagName("td");
     for (const elements of cells) {
         elements.addEventListener('mousedown', (Event) => {
             if(Event.button==0){
                 console.log(elements.getAttribute("id"));
                 ejes = elements.getAttribute("id").split('-');
+                cell = board[ejes[0][ejes[1]]];
                 console.log("ejes:    "+ejes);
-                if(board[ejes[0]][ejes[1]].isMine){
-                    updateCell(ejes[0],ejes[1],"isMineExploded",true);
+                if(cell.isMine){
+                    updateCell(cell,"isMineExploded",true);
                     revealMine(ejes[0],ejes[1]);
                     revealAllMines();
                     obj.state="lost";
@@ -150,7 +152,7 @@ function smile(){
 
 function revealMine(num1,num2){
     var cell = document.getElementById(num1+"-"+num2);
-    updateCell(num1,num2,"isRevealed",true);
+    updateCell(board[num1][num2],"isRevealed",true);
     cell.classList.add("cellMine");
     cell.classList.remove("cell");
 }
@@ -166,42 +168,45 @@ function revealAllMines(){
 }
 function flagCell(num1, num2){
     var cell = document.getElementById(num1+"-"+num2);
-    if(board[num1][num2].isFlagged){
+    var cellData = board[num1][num2];
+    if(cellData.isFlagged){
         questionCell(num1,num2);
-    }else if(board[num1][num2].isQuestionMarked){
+    }else if(cellData.isQuestionMarked){
         hiddenCell(num1,num2);
     }else{
-        updateCell(num1,num2,"isFlagged",true);
+        updateCell(cellData,"isFlagged",true);
         cell.classList.add("flagCell");
         cell.classList.remove("cell");
     }
 }
 function questionCell(num1, num2){
     var cell = document.getElementById(num1+"-"+num2);
-    updateCell(num1,num2,"isQuestionMarked",true);
-    updateCell(num1,num2,"isFlagged",false);
+    updateCell(board[num1][num2],"isQuestionMarked",true);
+    updateCell(board[num1][num2],"isFlagged",false);
     cell.classList.add("questionCell");
     cell.classList.remove("flagCell");
    
 }
 function hiddenCell(num1, num2){
     var cell = document.getElementById(num1+"-"+num2);
-    updateCell(num1,num2,"isQuestionMarked",false);
+    updateCell(board[num1][num2],"isQuestionMarked",false);
     cell.classList.add("cell");
     cell.classList.remove("questionCell");
 }
 
-function updateCell(num1,num2,property,value){
-    console.log(board[num1][num2]);
-    board[num1][num2][property] = value;
-    console.log(board[num1][num2]);
+function updateCell(cell,property,value){
+    console.log(cell);
+    cell[property] = value;
+    console.log(cell);
 }
 function adjacentMinesOfCell(num1,num2){
     var num = 0;
+    var cell;
     for (let i = num1-1; i <= num1+1; i++){
         for (let j = num2-1; j <= num2+1; j++){
             if(i>=0 && i<board.length && j>=0 && j<board[i].length){
-                if(board[i][j].isMine){
+                cell = board[i][j];
+                if(cell.isMine){
                     num++;
                 }
             }
@@ -212,10 +217,12 @@ function adjacentMinesOfCell(num1,num2){
 }
 
 function adjacentMinesCount(){
+    var cell;
     for (let i = 0; i < board.length; i++){
         for (let j = 0; j < board[i].length; j++){
-            if(!board[i][j].isMine){
-                board[i][j].numberOfMinesAround = adjacentMinesOfCell(i,j);
+            cell = board[i][j];
+            if(!cell.isMine){
+                cell.numberOfMinesAround = adjacentMinesOfCell(i,j);
             }
         }
     }
@@ -223,23 +230,26 @@ function adjacentMinesCount(){
 
 function uncoverCell(num1,num2){
     var cell = document.getElementById(num1+"-"+num2);
-    
-    console.log("num"+board[num1][num2].numberOfMinesAround+"Cell");
-    cell.classList.add("num"+board[num1][num2].numberOfMinesAround+"Cell");
+    var cellData = board[num1][num2];
+    console.log("num"+cellData.numberOfMinesAround+"Cell");
+    cell.classList.add("num"+cellData.numberOfMinesAround+"Cell");
     cell.classList.remove("cell");
-    updateCell(num1,num2,"isRevealed",true);
-    if(board[num1][num2].numberOfMinesAround == 0 && board[num1][num2].numberOfMinesAround!=null){
+    updateCell(cellData,"isRevealed",true);
+    if(cellData.numberOfMinesAround == 0 && cellData.numberOfMinesAround!=null){
         uncoverNeighbours(num1,num2);
     }
 
 }
 
 function uncoverNeighbours(num1,num2){
+    var cell;
+
   for (let i = num1 - 1; i <= num1 + 1; i++) {
     for (let j = num2 - 1; j <= num2 + 1; j++) {
-      if (i>=0 && i<board.length && j>=0 && j<board[i].length){
-        if (!board[i][j].isRevealed  && !board[i][j].isMine) {
-          uncoverCell(i, j);
+        if (i>=0 && i<board.length && j>=0 && j<board[i].length){
+            cell = board[i][j];
+            if (!cell.isRevealed  && !cell.isMine) {
+            uncoverCell(i, j);
         }
       }
     }

@@ -64,8 +64,9 @@ Then the cell "0-0" should be highlighted
 Scenario: When the game is over, all the mines should be revealed
 Given the user loads "*o-**"
 When the user reveals the cell "0-0"
-Then the cell "1-0" should show a mine
+Then the cell "0-0" should show a mine
 And the cell "1-0" should show a mine
+And the cell "1-1" should show a mine
 
 Scenario Outline: Revealing a cell without mine, showing the number of surrounding mines
 Given the user loads "<MockData>"
