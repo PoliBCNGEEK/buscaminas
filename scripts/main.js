@@ -1,13 +1,41 @@
+const TIMER = {
+    isRunning: false,
+    timerId: null,
+    value: 0,
+    interval: 1000,
+    start: function () {
+      this.isRunning = true;
+      this.timerId = setInterval(() => {
+        this.value++;
+        timerUpdate(this.value);
+      }, this.interval);
+    },
+    stop: function () {
+      clearInterval(this.timerId);
+      this.isRunning = false;
+      timerUpdate(this.value);
+    },
+    reset: function () {
+      this.value = 0;
+      this.stop();
+    },
+  };
+
+  function timerUpdate(value){
+    var timer = document.getElementById("timer");
+    timer.innerText = value;
+  }
 function gameData(){
     var game = {}
-    game.state = "";
-    game.smile = "normal";
+    game.state = "normal";
     game.height = 8;
     game.width = 8;
     game.numMines = 10;
-    game.timer = "0";
+    game.flaggedMines = 0;
+    game.flags= 10;
     return game;
 }
+
 var board = [];
 const obj = gameData();
 smile();
@@ -18,6 +46,11 @@ function addEventClick() {
     let cells = document.getElementsByTagName("td");
     for (const element of cells) {
         element.addEventListener('mousedown', (Event) => {
+            if(obj.state!="lost" && obj.state!="win"){
+                 if(!TIMER.isRunning){
+                TIMER.start();
+            }
+            
             if(Event.button==0){
                 console.log(element.getAttribute("id"));
                 ejes = element.getAttribute("id").split('-');
@@ -25,17 +58,17 @@ function addEventClick() {
                 if(cell.isMine){
                     updateCell(cell,"isMineExploded",true);
                     revealMine(ejes[0],ejes[1]);
-                    revealAllMines();
-                    obj.state="lost";
-                    smile();
+                    gameOver();
                 }else{
                     uncoverCell(ejes[0],ejes[1]);
                 }
             }else if(Event.button==2){
                 ejes = element.getAttribute("id").split('-');
                  flagCell(ejes[0],ejes[1]);
+                 flagCounter();
+                 gameWon();
             }
-        });
+    }});
         element.addEventListener('contextmenu', (Event) => {
             Event.preventDefault();
         });
@@ -52,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () =>
 {
     if(window.location.search.includes('?')){
         obj.numMines = countMines(mockData);
+        obj.flags = countMines(mockData);
         board = createBoardFromMockData(mockData);
         generateTable(board.length,board.length);
         
@@ -81,22 +115,26 @@ function randomMines(){
     }
 }
 
-function flagCounter(){
-    var flagCounter = document.getElementById("flag-counter");
-    flagCounter.innerText = obj.numMines;
+function sumFlagMineCounter(cellData){
+    if(cellData.isMine){
+        obj.flaggedMines++;
+    }
+    obj.flags--
+}
+function reduceFlagMineCounter(cellData){
+    if(cellData.isMine){
+        obj.flaggedMines--;
+    }
+    obj.flags++;
 }
 
-//falta poner empieze cuando haces click en una mina
-var iter = 0;
-function counter() {
-    var timer = document.getElementById("timer");
+function flagCounter(){
+    var flagCounter = document.getElementById("flag-counter");
+    flagCounter.innerText = obj.flags;
+}
 
-    timer.innerText = iter;
-    console.log('show at ' + (iter++));
-    setTimeout(counter, 999);
-  }
-  
 function minefieldCreation(){
+    board = [];
     for (let i = 0; i < obj.height; i++){
         board.push([])
             for (let j = 0; j < obj.width; j++){
@@ -135,13 +173,13 @@ function generateTable(height,width){
 
 
 function smile(){
-    var src = document.getElementById("smile");
-    if(obj.state === ""){
-        
+    var img = document.getElementById("smile");
+    if(obj.state === "normal"){
+        img.src = ("/img/smile-normal.png");
     }else if(obj.state === "lost"){
-        src.src = ("/img/smile-sad.png");
+        img.src = ("/img/smile-sad.png");
     }else{
-        src.src = ("/img/smile-happy.png");
+        img.src = ("/img/smile-happy.png");
     }
 }
 
@@ -153,8 +191,8 @@ function revealMine(row,col){
 }
 
 function revealAllMines(){
-    for (let i = 0; i < obj.height; i++){
-        for (let j = 0; j < obj.width; j++){
+    for (let i = 0; i < board.length; i++){
+        for (let j = 0; j < board[i].length; j++){
             if(board[i][j].isMine){
                 revealMine(i,j);
             }
@@ -166,12 +204,15 @@ function flagCell(row, col){
     var cellData = board[row][col];
     if(cellData.isFlagged){
         questionCell(row,col);
+        reduceFlagMineCounter(cellData);
     }else if(cellData.isQuestionMarked){
         hiddenCell(row,col);
     }else{
         updateCell(cellData,"isFlagged",true);
         cell.classList.add("flagCell");
         cell.classList.remove("cell");
+        sumFlagMineCounter(cellData);
+
     }
 }
 function questionCell(row, col){
@@ -235,16 +276,48 @@ function uncoverCell(row,col){
 
 function uncoverNeighbours(row,col){
     var cell;
-  for (let i = row - 1; i <= row + 1; i++) {
-    for (let j = col - 1; j <= col + 1; j++) {
+    var rowInt = parseInt(row);
+    var colInt = parseInt(col);
+  for (let i = rowInt - 1; i <= rowInt + 1; i++) {
+    for (let j = colInt - 1; j <= colInt + 1; j++) {
         if (i>=0 && i<board.length && j>=0 && j<board[i].length){
             cell = board[i][j];
             if (!cell.isRevealed && !cell.isMine) {
-                console.log(cell.numberOfMinesAround);
                 uncoverCell(i, j);
-                debugger;
         }
       }
     }
   }
+}
+
+function gameReset(){
+    obj.state="normal";
+    obj.numMines = 10;
+    TIMER.reset();
+    var tr;
+    var table = document.getElementById("table");
+    for (let i =0; i <  board.length; i++) {
+        tr = document.getElementById("row:"+i);
+        table.removeChild(tr);
+    }
+    minefieldCreation();
+    generateTable(obj.height,obj.width);
+    randomMines();
+    adjacentMinesCount();
+    flagCounter();
+    addEventClick();
+    smile();
+}
+function gameOver(){
+    revealAllMines();
+    obj.state="lost";
+    smile();
+    TIMER.stop();
+}
+function gameWon(){
+    if(obj.flaggedMines==obj.numMines && obj.flags==0){
+        obj.state="win";
+        TIMER.stop();
+        smile();
+    }
 }
